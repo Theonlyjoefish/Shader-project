@@ -80,7 +80,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Dev\SDL2-2.0.8\VisualC\Win32\Debug;C:\Dev\glew-2.1.0\lib\Debug\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32d.lib;opengl32.lib;sld2.lib;sld2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32d.lib;opengl32.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -128,6 +128,22 @@
     <ClInclude Include="anorms.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="rt3dObjLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cubeMap.frag" />
+    <None Include="cubeMap.vert" />
+    <None Include="textured.frag" />
+    <None Include="textured.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="fabric.bmp" />
+    <Image Include="studdedmetal.bmp" />
+    <Image Include="town-skybox\Town_bk.bmp" />
+    <Image Include="town-skybox\Town_dn.bmp" />
+    <Image Include="town-skybox\Town_ft.bmp" />
+    <Image Include="town-skybox\Town_lf.bmp" />
+    <Image Include="town-skybox\Town_rt.bmp" />
+    <Image Include="town-skybox\Town_up.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="bunny-5000.obj" />

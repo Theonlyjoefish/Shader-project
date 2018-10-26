@@ -37,6 +37,46 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="cubeMap.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cubeMap.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="textured.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="textured.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="town-skybox\Town_bk.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\Town_dn.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\Town_ft.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\Town_lf.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\Town_rt.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\Town_up.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="fabric.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="studdedmetal.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <Object Include="bunny-5000.obj">
       <Filter>Resource Files</Filter>
     </Object>
