@@ -132,6 +132,10 @@
   <ItemGroup>
     <None Include="cubeMap.frag" />
     <None Include="cubeMap.vert" />
+    <None Include="gouraud.vert" />
+    <None Include="phong.frag" />
+    <None Include="phong.vert" />
+    <None Include="simple.frag" />
     <None Include="textured.frag" />
     <None Include="textured.vert" />
   </ItemGroup>

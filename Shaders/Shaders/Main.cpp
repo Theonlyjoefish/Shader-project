@@ -58,8 +58,11 @@ float attLinear = 0.0f;
 float attQuadratic = 0.0f;
 
 GLuint gouraudShader;
+GLuint phongShader;
 GLuint texture;
 GLuint skyboxShader;
+
+int currentShader = 1;
 
 SDL_Window * setupRC(SDL_GLContext &context)
 {
@@ -173,6 +176,10 @@ void init(void)
 	rt3d::setLight(gouraudShader, light0);
 	rt3d::setMaterial(gouraudShader, material0);
 
+	phongShader = rt3d::initShaders("phong.vert", "phong.frag");
+	rt3d::setLight(phongShader, light0);
+	rt3d::setMaterial(phongShader, material0);
+
 	texture = rt3d::initShaders("textured.vert", "textured.frag");
 	skyboxShader = rt3d::initShaders("cubeMap.vert", "cubeMap.frag");
 
@@ -222,6 +229,52 @@ void update(void)
 	if (keys[SDL_SCANCODE_D]) eye = moveRight(eye, r, 0.1f);
 	if (keys[SDL_SCANCODE_R]) eye.y += 0.1;
 	if (keys[SDL_SCANCODE_F]) eye.y -= 0.1;
+
+	if (keys[SDL_SCANCODE_COMMA]) r -= 1.0f;
+	if (keys[SDL_SCANCODE_PERIOD]) r += 1.0f;
+
+	if (keys[SDL_SCANCODE_1]) currentShader = 1; 
+	if (keys[SDL_SCANCODE_2]) currentShader = 2; 
+}
+
+void drawGouraud(glm::vec4 tmp, glm::mat4 projection)
+{
+	glUseProgram(gouraudShader);
+
+	rt3d::setLightPos(gouraudShader, glm::value_ptr(tmp));
+	rt3d::setUniformMatrix4fv(gouraudShader, "projection", glm::value_ptr(projection));
+
+	
+	mvStack.push(mvStack.top());
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-2.0f, 1.0f, -3.0f));
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(20.0, 20.0, 20.0));
+	rt3d::setUniformMatrix4fv(gouraudShader, "modelview", glm::value_ptr(mvStack.top()));
+
+	
+	rt3d::setMaterial(gouraudShader, material0);
+	rt3d::drawIndexedMesh(meshObjects[2], bunnyIndexCount, GL_TRIANGLES);
+	mvStack.pop();
+}
+
+void drawPhong(glm::vec4 tmp, glm::mat4 projection)
+{
+	// draw the Phong shaded bunny
+	glUseProgram(phongShader);
+
+	//set the light and projection matrices to the shader
+	rt3d::setLightPos(phongShader, glm::value_ptr(tmp));
+	rt3d::setUniformMatrix4fv(phongShader, "projection", glm::value_ptr(projection));
+
+	//set modelview
+	mvStack.push(mvStack.top());
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-2.0f, 1.0f, -3.0f));
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(20.0, 20.0, 20.0));
+	rt3d::setUniformMatrix4fv(phongShader, "modelview", glm::value_ptr(mvStack.top()));
+
+	//set material and draw the object
+	rt3d::setMaterial(phongShader, material0);
+	rt3d::drawIndexedMesh(meshObjects[2], bunnyIndexCount, GL_TRIANGLES);
+	mvStack.pop();
 }
 
 void draw(SDL_Window * window)
@@ -257,6 +310,32 @@ void draw(SDL_Window * window)
 	glCullFace(GL_BACK);
 
 	glDepthMask(GL_TRUE); 
+
+	glUseProgram(phongShader);
+	rt3d::setUniformMatrix4fv(phongShader, "projection", glm::value_ptr(projection));
+
+	glm::vec4 tmp = mvStack.top()*lightPos;
+	light0.position[0] = tmp.x;
+	light0.position[1] = tmp.y;
+	light0.position[2] = tmp.z;
+	rt3d::setLightPos(phongShader, glm::value_ptr(tmp));
+
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	mvStack.push(mvStack.top());
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-10.0f, -0.1f, -10.0f));
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(20.0f, 0.1f, 20.0f));
+	rt3d::setUniformMatrix4fv(phongShader, "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setMaterial(phongShader, material0);
+	rt3d::drawIndexedMesh(meshObjects[0], cubeIndexCount, GL_TRIANGLES);
+	mvStack.pop();
+
+	if (currentShader == 1) drawGouraud(tmp, projection);
+	if (currentShader == 2) drawPhong(tmp, projection);
+
+	mvStack.pop();
+	glDepthMask(GL_TRUE);
+
+	SDL_GL_SwapWindow(window);
 }
 
 int main(int argc, char *argv[])
